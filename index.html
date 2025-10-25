@@ -498,19 +498,94 @@
             }
         }
 
+        /* Mobilni hamburger meni */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #d4af37;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            z-index: 999;
+            padding: 20px;
+        }
+
+        .mobile-menu.active {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .mobile-nav-item {
+            display: block;
+            padding: 15px 20px;
+            color: #ffffff;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .mobile-nav-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: #d4af37;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav-menu {
                 display: none;
             }
+
+            .mobile-menu-btn {
+                display: block;
+            }
             
             .hero-title {
                 font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
             }
             
             .cards-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
+            }
+
+            .card-content {
+                padding: 20px;
+            }
+
+            .card-title {
+                font-size: 1.3rem;
             }
             
             .map-container {
@@ -519,6 +594,70 @@
             
             .map-legend {
                 grid-template-columns: 1fr;
+            }
+
+            .map-point {
+                width: 25px;
+                height: 25px;
+            }
+
+            .map-tooltip {
+                font-size: 0.8rem;
+                padding: 8px 12px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .stat-item {
+                padding: 20px;
+            }
+
+            .stat-number {
+                font-size: 2.2rem;
+            }
+
+            .contact-form {
+                margin: 0 10px;
+                padding: 30px 20px;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .map-point {
+                width: 20px;
+                height: 20px;
+            }
+
+            .nav-container {
+                padding: 15px;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .logo-icon {
+                width: 35px;
+                height: 35px;
             }
         }
 
@@ -581,7 +720,18 @@
                     <li class="nav-item" onclick="showPage('about')">O nama</li>
                     <li class="nav-item" onclick="showPage('contact')">Kontakt</li>
                 </ul>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
             </nav>
+        </div>
+        
+        <!-- Mobilni meni -->
+        <div class="mobile-menu" id="mobile-menu">
+            <div class="mobile-nav-item" onclick="showPage('home'); closeMobileMenu()">Početna</div>
+            <div class="mobile-nav-item" onclick="showPage('courses'); closeMobileMenu()">Kursevi</div>
+            <div class="mobile-nav-item" onclick="showPage('map'); closeMobileMenu()">Mapa</div>
+            <div class="mobile-nav-item" onclick="showPage('about'); closeMobileMenu()">O nama</div>
+            <div class="mobile-nav-item" onclick="showPage('contact'); closeMobileMenu()">Kontakt</div>
+        </div>
         </div>
     </header>
 
@@ -1065,6 +1215,27 @@
             }, 2000);
         }
 
+        // Mobilni meni funkcije
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.remove('active');
+        }
+
+        // Zatvori mobilni meni kada se klikne van njega
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (!mobileMenu.contains(event.target) && !menuBtn.contains(event.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
         // Dodavanje hover efekata
         document.addEventListener('DOMContentLoaded', function() {
             // Dodaj floating animaciju na kartice
@@ -1086,5 +1257,5 @@
             });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99425d52d12bd814',t:'MTc2MTQwMjEzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99426cf793b0d814',t:'MTc2MTQwMjc3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
