@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hogwarts Academy - Magični Univerzitet</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100%;
+            line-height: 1.6;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        /* Moderni header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            z-index: 1000;
+            padding: 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #d4af37;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #d4af37, #f4e99b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-item {
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: #d4af37;
+            transform: translateY(-2px);
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #d4af37;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-item:hover::before {
+            width: 80%;
+        }
+
+        /* Hero sekcija sa slikom */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+                        url('https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 20px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #d4af37, #f4e99b, #d4af37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #cccccc;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #d4af37, #f4e99b);
+            color: #000;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Stranice */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 100px 0 50px;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Sekcije sa slikama */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 60px;
+            color: #d4af37;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+            border-color: rgba(212, 175, 55, 0.5);
+        }
+
+        .card-image {
+            height: 250px;
+            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.3));
+        }
+
+        .card-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            opacity: 0.8;
+            z-index: 2;
+        }
+
+        .card-content {
+            padding: 30px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #d4af37;
+        }
+
+        .card-description {
+            color: #cccccc;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-button {
+            background: transparent;
+            border: 2px solid #d4af37;
+            color: #d4af37;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .card-button:hover {
+            background: #d4af37;
+            color: #000;
+        }
+
+        /* Mapa Hogwarts-a */
+        .map-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3);
+            border: 2px solid rgba(212, 175, 55, 0.4);
+        }
+
+        .map-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .map-container:hover .map-image {
+            transform: scale(1.02);
+        }
+
+        .map-point {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #d4af37, #f4e99b);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+            animation: pulse 2s infinite;
+            z-index: 10;
+        }
+
+        .map-point::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            border-radius: 50%;
+            animation: ripple 2s infinite;
+        }
+
+        .map-point:hover {
+            transform: scale(1.5);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
+        }
+
+        .map-tooltip {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: #d4af37;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .map-point:hover .map-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-10px);
+        }
+
+        .map-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.9);
+        }
+
+        /* Pozicije tačaka na mapi */
+        .point-castle { top: 25%; left: 45%; }
+        .point-great-hall { top: 30%; left: 47%; }
+        .point-library { top: 28%; left: 52%; }
+        .point-potions { top: 45%; left: 40%; }
+        .point-quidditch { top: 60%; left: 20%; }
+        .point-forbidden-forest { top: 70%; left: 70%; }
+        .point-lake { top: 80%; left: 45%; }
+        .point-hagrid { top: 75%; left: 25%; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        .map-legend {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .legend-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, #d4af37, #f4e99b);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .legend-text {
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+
+        /* Kontakt forma */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #d4af37;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #d4af37, #f4e99b);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Animacije */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .map-container {
+                margin: 0 10px;
+            }
+            
+            .map-legend {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Dodatni vizuelni efekti */
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .glow {
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Stats sekcija */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #d4af37;
+            display: block;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">🏰</div>
+                <span>Hogwarts Academy</span>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item" onclick="showPage('home')">Početna</li>
+                    <li class="nav-item" onclick="showPage('courses')">Kursevi</li>
+                    <li class="nav-item" onclick="showPage('map')">Mapa</li>
+                    <li class="nav-item" onclick="showPage('about')">O nama</li>
+                    <li class="nav-item" onclick="showPage('contact')">Kontakt</li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Početna stranica -->
+    <main>
+        <div id="home" class="page active">
+            <section class="hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">Hogwarts Academy</h1>
+                    <p class="hero-subtitle">Prestižni magični univerzitet za buduće čarobnjake</p>
+                    <a href="#" class="cta-button" onclick="showPage('courses')">Istražite kurseve</a>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">Zašto Hogwarts?</h2>
+                    <div class="stats">
+                        <div class="stat-item floating">
+                            <span class="stat-number">1000+</span>
+                            <div class="stat-label">Diplomiranih čarobnjaka</div>
+                        </div>
+                        <div class="stat-item floating">
+                            <span class="stat-number">50+</span>
+                            <div class="stat-label">Profesora eksperata</div>
+                        </div>
+                        <div class="stat-item floating">
+                            <span class="stat-number">4</span>
+                            <div class="stat-label">Prestižna doma</div>
+                        </div>
+                        <div class="stat-item floating">
+                            <span class="stat-number">1000</span>
+                            <div class="stat-label">Godina tradicije</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Kursevi stranica -->
+        <div id="courses" class="page">
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">Naši Kursevi</h2>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-image">
+                                <div class="card-icon">⚗️</div>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Napredni Napici</h3>
+                                <p class="card-description">
+                                    Naučite da pravite najkomplikovanije magične napitke. 
+                                    Od eliksira sreće do napitka istine.
+                                </p>
+                                <button class="card-button" onclick="enrollCourse('potions')">Prijavite se</button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-image">
+                                <div class="card-icon">🪄</div>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Preobražaj</h3>
+                                <p class="card-description">
+                                    Majstorski kurs transformacije objekata i bića. 
+                                    Naučite da menjate oblik materije.
+                                </p>
+                                <button class="card-button" onclick="enrollCourse('transfiguration')">Prijavite se</button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-image">
+                                <div class="card-icon">🛡️</div>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Odbrana od Mračnih Veština</h3>
+                                <p class="card-description">
+                                    Zaštitite se od najopasnih mračnih čarolija. 
+                                    Naučite Patronus i druge odbrambene tehnike.
+                                </p>
+                                <button class="card-button" onclick="enrollCourse('defense')">Prijavite se</button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-image">
+                                <div class="card-icon">✨</div>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Čarolije i Čini</h3>
+                                <p class="card-description">
+                                    Osnove magije - levitacija, osvetljavanje, 
+                                    i sve svakodnevne čarolije.
+                                </p>
+                                <button class="card-button" onclick="enrollCourse('charms')">Prijavite se</button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-image">
+                                <div class="card-icon">🌿</div>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Herbologija</h3>
+                                <p class="card-description">
+                                    Proučavanje magičnih biljaka i njihovih svojstava. 
+                                    Od Mandragore do Đavoljih zamki.
+                                </p>
+                                <button class="card-button" onclick="enrollCourse('herbology')">Prijavite se</button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-image">
+                                <div class="card-icon">🔮</div>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Proricanje</h3>
+                                <p class="card-description">
+                                    Naučite da vidite budućnost kroz kristalnu kuglu, 
+                                    čitanje dlana i tumačenje snova.
+                                </p>
+                                <button class="card-button" onclick="enrollCourse('divination')">Prijavite se</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Mapa stranica -->
+        <div id="map" class="page">
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">Mapa Hogwarts-a</h2>
+                    <p style="text-align: center; color: #cccccc; margin-bottom: 40px; font-size: 1.1rem;">
+                        Istražite magične lokacije Hogwarts-a. Kliknite na svetleće tačke da saznate više!
+                    </p>
+                    
+                    <div class="map-container">
+                        <img src="https://i.redd.it/1qh14y55x3b61.jpg" alt="Mapa Hogwarts-a" class="map-image" onerror="this.src=''; this.alt='Mapa se učitava...'; this.style.display='none';">
+                        
+                        <!-- Interaktivne tačke na mapi -->
+                        <div class="map-point point-castle" onclick="showLocation('castle')">
+                            <div class="map-tooltip">🏰 Hogwarts Zamak</div>
+                        </div>
+                        
+                        <div class="map-point point-great-hall" onclick="showLocation('great-hall')">
+                            <div class="map-tooltip">🍽️ Velika Dvorana</div>
+                        </div>
+                        
+                        <div class="map-point point-library" onclick="showLocation('library')">
+                            <div class="map-tooltip">📚 Biblioteka</div>
+                        </div>
+                        
+                        <div class="map-point point-potions" onclick="showLocation('potions')">
+                            <div class="map-tooltip">⚗️ Učionica za Napitke</div>
+                        </div>
+                        
+                        <div class="map-point point-quidditch" onclick="showLocation('quidditch')">
+                            <div class="map-tooltip">🏟️ Kvidiš Teren</div>
+                        </div>
+                        
+                        <div class="map-point point-forbidden-forest" onclick="showLocation('forest')">
+                            <div class="map-tooltip">🌲 Zabranjena Šuma</div>
+                        </div>
+                        
+                        <div class="map-point point-lake" onclick="showLocation('lake')">
+                            <div class="map-tooltip">🌊 Crno Jezero</div>
+                        </div>
+                        
+                        <div class="map-point point-hagrid" onclick="showLocation('hagrid')">
+                            <div class="map-tooltip">🏠 Hagridova Koliba</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Legenda -->
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <div class="legend-dot"></div>
+                            <div class="legend-text">🏰 Glavne zgrade i učionice</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot"></div>
+                            <div class="legend-text">🏟️ Sportski tereni</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot"></div>
+                            <div class="legend-text">🌲 Prirodne lokacije</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot"></div>
+                            <div class="legend-text">🏠 Posebna mesta</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- O nama stranica -->
+        <div id="about" class="page">
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">O Hogwarts Academy</h2>
+                    <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                        <p style="font-size: 1.2rem; color: #cccccc; line-height: 1.8; margin-bottom: 40px;">
+                            Hogwarts Academy je prestižna magična institucija sa preko hiljadu godina tradicije. 
+                            Naša misija je da obrazujemo buduće čarobnjake i čarobnice, pružajući im znanje 
+                            i veštine potrebne za uspešan život u magičnom svetu.
+                        </p>
+                        
+                        <div class="cards-grid" style="margin-top: 60px;">
+                            <div class="card">
+                                <div class="card-image">
+                                    <div class="card-icon">🦁</div>
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-title">Gryffindor</h3>
+                                    <p class="card-description">
+                                        Dom hrabrih i odvažnih. Crveno-zlatne boje simbolizuju 
+                                        hrabrost i viteštvo.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-image">
+                                    <div class="card-icon">🦅</div>
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-title">Ravenclaw</h3>
+                                    <p class="card-description">
+                                        Dom mudrih i kreativnih. Plavo-bronzane boje predstavljaju 
+                                        mudrost i učenost.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-image">
+                                    <div class="card-icon">🦡</div>
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-title">Hufflepuff</h3>
+                                    <p class="card-description">
+                                        Dom lojalnih i marljivih. Žuto-crne boje simbolizuju 
+                                        lojalnost i posvećenost.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-image">
+                                    <div class="card-icon">🐍</div>
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-title">Slytherin</h3>
+                                    <p class="card-description">
+                                        Dom ambicioznih i lukavnih. Zeleno-srebrne boje predstavljaju 
+                                        ambiciju i lukavstvo.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Kontakt stranica -->
+        <div id="contact" class="page">
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">Kontaktirajte nas</h2>
+                    <div class="contact-form">
+                        <form onsubmit="submitApplication(event)">
+                            <div class="form-group">
+                                <label for="full-name">Puno ime:</label>
+                                <input type="text" id="full-name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email adresa:</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="house-preference">Preferirani dom:</label>
+                                <select id="house-preference">
+                                    <option value="gryffindor">Gryffindor</option>
+                                    <option value="ravenclaw">Ravenclaw</option>
+                                    <option value="hufflepuff">Hufflepuff</option>
+                                    <option value="slytherin">Slytherin</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="course-interest">Kurs koji vas zanima:</label>
+                                <select id="course-interest">
+                                    <option value="potions">Napredni Napici</option>
+                                    <option value="transfiguration">Preobražaj</option>
+                                    <option value="defense">Odbrana od Mračnih Veština</option>
+                                    <option value="charms">Čarolije i Čini</option>
+                                    <option value="herbology">Herbologija</option>
+                                    <option value="divination">Proricanje</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message">Poruka:</label>
+                                <textarea id="message" rows="5" placeholder="Opišite zašto želite da se pridružite Hogwarts Academy..."></textarea>
+                            </div>
+                            
+                            <button type="submit" class="submit-btn">Pošaljite prijavu</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // Navigacija između stranica
+        function showPage(pageId) {
+            // Sakrij sve stranice
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Prikaži odabranu stranicu
+            document.getElementById(pageId).classList.add('active');
+            
+            // Skroluj na vrh
+            window.scrollTo(0, 0);
+        }
+
+        // Prijava na kurs
+        function enrollCourse(courseType) {
+            const courses = {
+                potions: 'Napredni Napici',
+                transfiguration: 'Preobražaj',
+                defense: 'Odbrana od Mračnih Veština',
+                charms: 'Čarolije i Čini',
+                herbology: 'Herbologija',
+                divination: 'Proricanje'
+            };
+            
+            // Animacija dugmeta
+            event.target.style.transform = 'scale(0.95)';
+            event.target.innerHTML = 'Prijavljeno! ✓';
+            event.target.style.background = '#d4af37';
+            event.target.style.color = '#000';
+            
+            setTimeout(() => {
+                alert(`Uspešno ste se prijavili na kurs: ${courses[courseType]}!\n\nUskoro ćete dobiti email sa detaljima o početku kursa.`);
+                event.target.style.transform = '';
+                event.target.innerHTML = 'Prijavite se';
+                event.target.style.background = '';
+                event.target.style.color = '';
+            }, 1000);
+        }
+
+        // Prikaz informacija o lokacijama na mapi
+        function showLocation(locationType) {
+            const locations = {
+                'castle': {
+                    title: '🏰 Hogwarts Zamak',
+                    description: 'Glavni zamak Hogwarts-a, dom za hiljade studenata i profesora. Ovde se nalaze učionice, spavaonice domova, i mnoge magične prostorije.',
+                    details: 'Izgrađen pre više od hiljadu godina, zamak sadrži 142 stepeništa, od kojih se neka pomeraju.'
+                },
+                'great-hall': {
+                    title: '🍽️ Velika Dvorana',
+                    description: 'Srce Hogwarts-a gde se održavaju svi obroci, ceremonije i važni događaji. Magični plafon prikazuje trenutno vreme.',
+                    details: 'Ovde se održava i godišnja Ceremonija Razvrstavanja novih studenata u domove.'
+                },
+                'library': {
+                    title: '📚 Biblioteka',
+                    description: 'Ogromna kolekcija magičnih knjiga, pergamenata i drevnih tekstova. Upravljana od strane stroge bibliotekarke.',
+                    details: 'Sadrži preko 10.000 knjiga, uključujući i Zabranjenu sekciju sa opasnim magičnim znanjem.'
+                },
+                'potions': {
+                    title: '⚗️ Učionica za Napitke',
+                    description: 'Tamna učionica u podrumu zamka gde se uče veštine pravljenja magičnih napitaka i eliksira.',
+                    details: 'Opremljena kotlovima, retortama i policama punim čudnih sastojaka.'
+                },
+                'quidditch': {
+                    title: '🏟️ Kvidiš Teren',
+                    description: 'Profesionalni teren za najuzbudljiviji magični sport. Ovde se igraju međudomske utakmice.',
+                    details: 'Teren ima tri obruča na svakoj strani i može da primi hiljade gledalaca na tribinama.'
+                },
+                'forest': {
+                    title: '🌲 Zabranjena Šuma',
+                    description: 'Misteriozan i opasan deo Hogwarts-a pun magičnih stvorenja. Studentima je zabranjen ulazak.',
+                    details: 'Dom kentaura, akromantula, jednoroga i mnogih drugih magičnih bića.'
+                },
+                'lake': {
+                    title: '🌊 Crno Jezero',
+                    description: 'Veliko jezero pored Hogwarts-a, dom sirena i džinovske hobotnice. Koristi se za Trimagijski turnir.',
+                    details: 'U dubinama jezera žive sirene koje čuvaju blago i tajne.'
+                },
+                'hagrid': {
+                    title: '🏠 Hagridova Koliba',
+                    description: 'Dom čuvara ključeva i terena Hogwarts-a. Mesto gde studenti često dolaze u posetu.',
+                    details: 'Hagrid ovde čuva svoja magična stvorenja i priprema čaj za posetioce.'
+                }
+            };
+            
+            const location = locations[locationType];
+            if (!location) return;
+            
+            // Kreiranje modal-a za prikaz informacija
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                cursor: pointer;
+                animation: fadeIn 0.3s ease-out;
+            `;
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: rgba(10, 10, 10, 0.95);
+                padding: 40px;
+                border-radius: 20px;
+                text-align: center;
+                max-width: 600px;
+                border: 2px solid rgba(212, 175, 55, 0.4);
+                backdrop-filter: blur(20px);
+                box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3);
+                cursor: default;
+            `;
+            
+            content.innerHTML = `
+                <h3 style="color: #d4af37; margin-bottom: 20px; font-size: 2.2rem; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);">${location.title}</h3>
+                <p style="color: #cccccc; line-height: 1.8; font-size: 1.2rem; margin-bottom: 20px;">${location.description}</p>
+                <p style="color: #f4e99b; line-height: 1.6; font-size: 1rem; font-style: italic; margin-bottom: 30px;">${location.details}</p>
+                <p style="color: #d4af37; font-size: 0.9rem; opacity: 0.8;">Kliknite bilo gde da zatvorite</p>
+            `;
+            
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+            
+            // Sprečava zatvaranje kada se klikne na sadržaj
+            content.onclick = (e) => e.stopPropagation();
+            modal.onclick = () => modal.remove();
+        }
+
+        // Slanje prijave
+        function submitApplication(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('full-name').value;
+            const email = document.getElementById('email').value;
+            const house = document.getElementById('house-preference').value;
+            const course = document.getElementById('course-interest').value;
+            const message = document.getElementById('message').value;
+            
+            // Animacija dugmeta
+            const submitBtn = event.target.querySelector('.submit-btn');
+            submitBtn.innerHTML = 'Šalje se...';
+            submitBtn.style.background = 'linear-gradient(45deg, #666, #888)';
+            
+            setTimeout(() => {
+                alert(`Hvala vam ${name}!\n\nVaša prijava je uspešno poslata.\nDom: ${house.charAt(0).toUpperCase() + house.slice(1)}\nKurs: ${course}\n\nKontaktiraćemo vas na ${email} u najkraćem roku.`);
+                
+                // Reset forme
+                event.target.reset();
+                submitBtn.innerHTML = 'Pošaljite prijavu';
+                submitBtn.style.background = '';
+            }, 2000);
+        }
+
+        // Dodavanje hover efekata
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dodaj floating animaciju na kartice
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = (index * 0.1) + 's';
+            });
+            
+            // Dodaj glow efekat na hover
+            const interactiveElements = document.querySelectorAll('.card, .nav-item, .cta-button');
+            interactiveElements.forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    this.classList.add('glow');
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    this.classList.remove('glow');
+                });
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99425d52d12bd814',t:'MTc2MTQwMjEzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
